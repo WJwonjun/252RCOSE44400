@@ -7,6 +7,16 @@ app = Flask(__name__)
 # Path to stored message file
 DATA_PATH = "/data/message.txt"
 
+# v1 has no /api/health endpoint
+# (Students add this in v2)
+
+# v2 TODO:
+# - Modify write_message() or update_message() to include a timestamp
+#   Format: "<message> (updated at YYYY-MM-DD HH:MM:SS)"
+#
+# - Add new endpoint /api/health that returns:
+#   { "status": "healthy" }
+
 
 def read_message():
     """
@@ -27,7 +37,8 @@ def write_message(msg: str):
     - Write msg to the file
     """
     with open(DATA_PATH, 'w') as f:
-        f.write(msg)
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        f.write(f"{msg} (updated at {timestamp})")
 
 
 @app.route("/api/message", methods=["GET"])
@@ -40,6 +51,13 @@ def get_message():
     stored_message = read_message()
     return jsonify({"message": stored_message})
 
+@app.route("/api/health", methods=["GET"])
+def get_health():
+    """
+    TODO:
+    - Return { "status": "healthy" }
+    """
+    return jsonify({"status": "healthy"})
 
 @app.route("/api/message", methods=["POST"])
 def update_message():
@@ -57,17 +75,10 @@ def update_message():
 
 
 
-# v1 has no /api/health endpoint
-# (Students add this in v2)
-
-# v2 TODO:
-# - Modify write_message() or update_message() to include a timestamp
-#   Format: "<message> (updated at YYYY-MM-DD HH:MM:SS)"
-#
-# - Add new endpoint /api/health that returns:
-#   { "status": "healthy" }
 
 
 if __name__ == "__main__":
     # Do not change the host or port
     app.run(host="0.0.0.0", port=5001)
+
+
