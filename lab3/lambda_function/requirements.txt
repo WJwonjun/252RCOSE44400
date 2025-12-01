@@ -1,0 +1,4 @@
+# List the required libraries here.
+boto3
+botocore
+textblob
